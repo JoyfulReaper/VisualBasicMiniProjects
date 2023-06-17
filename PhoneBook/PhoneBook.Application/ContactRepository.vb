@@ -10,8 +10,9 @@ Public Class ContactRepository
             command.Parameters.AddWithValue("@PhoneNumber", contact.PhoneNumber)
             connection.Open()
 
-            Dim result = command.ExecuteScalar()
-            Return Convert.ToInt32(result)
+            Dim result = Convert.ToInt32(command.ExecuteScalar())
+            contact.ContactId = result
+            Return result
         End Using
     End Function
 End Class

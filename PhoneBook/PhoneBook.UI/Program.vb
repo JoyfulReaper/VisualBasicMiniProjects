@@ -7,7 +7,14 @@ Imports PhoneBook.Domain
 Module Program
     Sub Main(args As String())
         Dim menuService = New MenuService
+        Dim contactService = New ConsoleContactService
+
         menuService.PrintHeader()
-        menuService.PrintMenu()
+        Do
+            menuService.PrintMenu()
+            Dim action = menuService.GetAction()
+            contactService.ProcessAction(action)
+        Loop
+
     End Sub
 End Module

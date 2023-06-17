@@ -44,6 +44,26 @@ Public Class ContactRepository
         Return Nothing
     End Function
 
+    Function FetchAll() As List(Of Contact)
+        Using connection As New SqlConnection(GetConnectionString())
+            Dim command As New SqlCommand("SELECT * FROM Contacts WHERE DateDeleted IS NULL", connection)
+            connection.Open()
+
+            Dim reader = command.ExecuteReader()
+            Dim contacts = New List(Of Contact)
+            While reader.Read()
+                contacts.Add(New Contact With {
+                    .ContactId = reader.GetInt32(0),
+                    .FirstName = reader.GetString(1),
+                    .LastName = reader.GetString(2),
+                    .PhoneNumber = reader.GetString(4),
+                    .DateCreated = reader.GetDateTime(5)
+                })
+            End While
+            Return contacts
+        End Using
+    End Function
+
     Function Search(name As String) As List(Of Contact)
         Using connection As New SqlConnection(GetConnectionString())
             Dim command As New SqlCommand("SELECT * FROM Contacts WHERE FirstName LIKE @Name OR LastName LIKE @Name OR FullName LIKE @Name AND DateDeleted IS NULL", connection)
@@ -57,8 +77,8 @@ Public Class ContactRepository
                     .ContactId = reader.GetInt32(0),
                     .FirstName = reader.GetString(1),
                     .LastName = reader.GetString(2),
-                    .PhoneNumber = reader.GetString(3),
-                    .DateCreated = reader.GetDateTime(4)
+                    .PhoneNumber = reader.GetString(4),
+                    .DateCreated = reader.GetDateTime(5)
                 })
             End While
             Return contacts
@@ -89,8 +109,8 @@ Public Class ContactRepository
                     .ContactId = reader.GetInt32(0),
                     .FirstName = reader.GetString(1),
                     .LastName = reader.GetString(2),
-                    .PhoneNumber = reader.GetString(3),
-                    .DateCreated = reader.GetDateTime(4)
+                    .PhoneNumber = reader.GetString(4),
+                    .DateCreated = reader.GetDateTime(5)
                 })
             End While
             Return contacts.SingleOrDefault()

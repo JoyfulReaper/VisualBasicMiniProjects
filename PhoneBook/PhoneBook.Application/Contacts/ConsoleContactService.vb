@@ -17,16 +17,19 @@ Public Class ConsoleContactService
         End Select
     End Sub
 
-
-    Public Sub SearchContact()
+    Private Sub SearchContact()
         Throw New NotImplementedException()
     End Sub
 
     Public Sub ListAllContacts()
-        Throw New NotImplementedException()
+        Dim contactRepository = New ContactRepository()
+        Dim contacts = contactRepository.FetchAll()
+        For Each contact In contacts
+            Console.WriteLine($"{contact.FirstName} {contact.LastName} - {contact.PhoneNumber}")
+        Next
     End Sub
 
-    Public Sub DeleteContact()
+    Private Sub DeleteContact()
         Console.Write("Enter the exact name of the contact to delete: ")
         Dim nameOfContactToDelete = Console.ReadLine()
         Dim contactRepository = New ContactRepository()
@@ -42,7 +45,7 @@ Public Class ConsoleContactService
         Console.WriteLine("Contact deleted successfully.")
     End Sub
 
-    Public Sub AddContact()
+    Private Sub AddContact()
         Console.WriteLine("Enter first name:")
         Dim firstName = Console.ReadLine()
         Console.WriteLine("Enter last name:")
@@ -62,7 +65,7 @@ Public Class ConsoleContactService
         Console.WriteLine("Contact added successfully.")
     End Sub
 
-    Public Sub ExitApplication()
+    Private Sub ExitApplication()
         Environment.Exit(0)
     End Sub
 

@@ -4,8 +4,9 @@ Imports Microsoft.Data.SqlClient
 Imports PhoneBook.Domain
 
 Public Class ContactRepository
-    Function Create(contact As Contact) As Integer
+    Implements IContactRepository
 
+    Function Create(contact As Contact) As Integer Implements IContactRepository.Create
         Dim existingContactWithSameName = SearchExact(contact.FullName)
         If existingContactWithSameName IsNot Nothing Then
             Throw New ContactExistException("Contact with same name already exists")
@@ -24,7 +25,7 @@ Public Class ContactRepository
         End Using
     End Function
 
-    Function Fetch(contactId As Integer) As Contact
+    Function Fetch(contactId As Integer) As Contact Implements IContactRepository.Fetch
         Using connection As New SqlConnection(GetConnectionString())
             Dim command As New SqlCommand("SELECT * FROM Contacts WHERE ContactId = @ContactId AND DateDeleted IS NULL", connection)
             command.Parameters.AddWithValue("@ContactId", contactId)
@@ -44,7 +45,7 @@ Public Class ContactRepository
         Return Nothing
     End Function
 
-    Function FetchAll() As List(Of Contact)
+    Function FetchAll() As List(Of Contact) Implements IContactRepository.FetchAll
         Using connection As New SqlConnection(GetConnectionString())
             Dim command As New SqlCommand("SELECT * FROM Contacts WHERE DateDeleted IS NULL", connection)
             connection.Open()
@@ -64,7 +65,7 @@ Public Class ContactRepository
         End Using
     End Function
 
-    Function Search(name As String) As List(Of Contact)
+    Function Search(name As String) As List(Of Contact) Implements IContactRepository.Search
         Using connection As New SqlConnection(GetConnectionString())
             Dim command As New SqlCommand("SELECT * FROM Contacts WHERE (FirstName LIKE @Name OR LastName LIKE @Name OR FullName LIKE @Name) AND DateDeleted IS NULL", connection)
             command.Parameters.AddWithValue("@Name", $"%{name}%")
@@ -85,7 +86,7 @@ Public Class ContactRepository
         End Using
     End Function
 
-    Sub Delete(contactId As Integer)
+    Sub Delete(contactId As Integer) Implements IContactRepository.Delete
         Using connection As New SqlConnection(GetConnectionString())
             Dim command As New SqlCommand("UPDATE Contacts SET DateDeleted = @DateDeleted WHERE ContactId = @ContactId", connection)
             command.Parameters.AddWithValue("@DateDeleted", DateTime.Now)
@@ -96,7 +97,7 @@ Public Class ContactRepository
         End Using
     End Sub
 
-    Function SearchExact(name As String) As Contact
+    Function SearchExact(name As String) As Contact Implements IContactRepository.SearchExact
         Using connection As New SqlConnection(GetConnectionString())
             Dim command As New SqlCommand("SELECT * FROM Contacts WHERE FullName = @Name AND DateDeleted IS NULL", connection)
             command.Parameters.AddWithValue("@Name", $"{name}")

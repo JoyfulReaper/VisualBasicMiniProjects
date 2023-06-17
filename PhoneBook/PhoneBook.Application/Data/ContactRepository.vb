@@ -66,7 +66,7 @@ Public Class ContactRepository
 
     Function Search(name As String) As List(Of Contact)
         Using connection As New SqlConnection(GetConnectionString())
-            Dim command As New SqlCommand("SELECT * FROM Contacts WHERE FirstName LIKE @Name OR LastName LIKE @Name OR FullName LIKE @Name AND DateDeleted IS NULL", connection)
+            Dim command As New SqlCommand("SELECT * FROM Contacts WHERE (FirstName LIKE @Name OR LastName LIKE @Name OR FullName LIKE @Name) AND DateDeleted IS NULL", connection)
             command.Parameters.AddWithValue("@Name", $"%{name}%")
             connection.Open()
 
@@ -99,7 +99,7 @@ Public Class ContactRepository
     Function SearchExact(name As String) As Contact
         Using connection As New SqlConnection(GetConnectionString())
             Dim command As New SqlCommand("SELECT * FROM Contacts WHERE FullName = @Name AND DateDeleted IS NULL", connection)
-            command.Parameters.AddWithValue("@Name", $"%{name}%")
+            command.Parameters.AddWithValue("@Name", $"{name}")
             connection.Open()
 
             Dim reader = command.ExecuteReader()

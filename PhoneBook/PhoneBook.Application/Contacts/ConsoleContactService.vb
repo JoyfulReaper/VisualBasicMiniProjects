@@ -18,13 +18,21 @@ Public Class ConsoleContactService
     End Sub
 
     Private Sub SearchContact()
-        Throw New NotImplementedException()
+        Dim contactRepository = New ContactRepository()
+        Console.Write("Enter the name of the contact to search: ")
+        Dim nameOfContactToSearch = Console.ReadLine()
+        Dim contacts = contactRepository.Search(nameOfContactToSearch)
+        PrintContactList(contacts)
     End Sub
 
-    Public Sub ListAllContacts()
+    Private Sub ListAllContacts()
         Dim contactRepository = New ContactRepository()
         Dim contacts = contactRepository.FetchAll()
-        For Each contact In contacts
+        PrintContactList(contacts)
+    End Sub
+
+    Private Sub PrintContactList(list As List(Of Contact))
+        For Each contact In list
             Console.WriteLine($"{contact.FirstName} {contact.LastName} - {contact.PhoneNumber}")
         Next
     End Sub

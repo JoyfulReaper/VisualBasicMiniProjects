@@ -1,4 +1,6 @@
-﻿Module ConnectionStringFactory
+﻿Option Strict On
+
+Module ConnectionStringFactory
     Public Function GetConnectionString() As String
         Return "Data Source=.;Initial Catalog=PhoneBook;Integrated Security=True;TrustServerCertificate=true"
     End Function
